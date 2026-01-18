@@ -5,11 +5,12 @@
         <el-scrollbar class="h-[400px] sm:h-[600px]">
           <el-form-item label="权限" prop="permIds">
             <div>
-              <el-checkbox label="展开/折叠" @change="handleExpand" />
-              <el-checkbox label="全选/不全选" @change="handleSelectAll" />
-              <el-checkbox v-model="checkStrictly" label="父子联动" />
+              <el-checkbox id="expandCollapse" label="展开/折叠" @change="handleExpand" />
+              <el-checkbox id="selectAll" label="全选/不全选" @change="handleSelectAll" />
+              <el-checkbox id="checkStrictlyCheckbox" v-model="checkStrictly" label="父子联动" />
               <div>
                 <el-tree
+                  id="permIds"
                   ref="treeRef"
                   :data="menuTree"
                   :props="{

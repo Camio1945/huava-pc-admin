@@ -3,11 +3,12 @@
     <popup ref="popupRef" :title="popupTitle" :async="true" width="550px" @confirm="handleSubmit" @close="handleClose">
       <el-form ref="formRef" :model="formData" label-width="84px" :rules="rules">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="formData.username" placeholder="请输入用户名" clearable />
+          <el-input id="username" v-model="formData.username" placeholder="请输入用户名" clearable />
         </el-form-item>
 
         <el-form-item label="头像" prop="avatar">
           <el-upload
+            id="avatar"
             class="avatar-uploader"
             :action="uploadUrl"
             :headers="headers"
@@ -20,11 +21,12 @@
         </el-form-item>
 
         <el-form-item label="姓名" prop="realName">
-          <el-input v-model="formData.realName" placeholder="请输入姓名" clearable />
+          <el-input id="realName" v-model="formData.realName" placeholder="请输入姓名" clearable />
         </el-form-item>
 
         <el-form-item label="手机号" prop="phoneNumber">
           <el-input
+            id="phoneNumber"
             class="ls-input"
             v-model="formData.phoneNumber"
             placeholder="请输入手机号"
@@ -34,24 +36,24 @@
         </el-form-item>
 
         <el-form-item label="角色" prop="roleIds">
-          <el-select v-model="formData.roleIds" class="flex-1" multiple placeholder="请选择角色" clearable>
+          <el-select id="roleIds" v-model="formData.roleIds" class="flex-1" multiple placeholder="请选择角色" clearable>
             <el-option v-for="(item, index) in roles" :key="index" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
 
         <el-form-item label="修改密码" prop="isUpdatingPassword" v-if="mode === 'edit'">
-          <el-radio-group v-model="isUpdatingPassword">
+          <el-radio-group id="isUpdatingPassword" v-model="isUpdatingPassword">
             <el-radio :label="true">使用新密码</el-radio>
             <el-radio :label="false">不修改密码</el-radio>
           </el-radio-group>
         </el-form-item>
 
         <el-form-item label="密码" prop="password" v-if="mode === 'add' || isUpdatingPassword">
-          <el-input v-model="formData.password" show-password clearable placeholder="请输入密码" />
+          <el-input id="password" v-model="formData.password" show-password clearable placeholder="请输入密码" />
         </el-form-item>
 
         <el-form-item label="是否启用">
-          <el-switch v-model="formData.isEnabled" :active-value="true" :inactive-value="false" />
+          <el-switch id="isEnabled" v-model="formData.isEnabled" :active-value="true" :inactive-value="false" />
         </el-form-item>
       </el-form>
     </popup>

@@ -3,10 +3,11 @@
     <popup ref="popupRef" :title="popupTitle" :async="true" width="550px" @confirm="handleSubmit" @close="handleClose">
       <el-form class="ls-form" ref="formRef" :rules="rules" :model="formData" label-width="60px">
         <el-form-item label="名称" prop="name">
-          <el-input class="ls-input" v-model="formData.name" placeholder="请输入名称" clearable />
+          <el-input id="name" class="ls-input" v-model="formData.name" placeholder="请输入名称" clearable />
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input
+            id="description"
             v-model="formData.description"
             type="textarea"
             :autosize="{ minRows: 4, maxRows: 6 }"
@@ -16,7 +17,7 @@
           />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input-number v-model="formData.sort" :min="0" :max="9999" />
+          <el-input-number id="sort" v-model="formData.sort" :min="0" :max="9999" />
         </el-form-item>
       </el-form>
     </popup>

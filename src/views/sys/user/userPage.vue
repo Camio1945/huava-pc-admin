@@ -4,6 +4,7 @@
       <el-form class="mb-[-16px]" :model="formData" inline>
         <el-form-item label="">
           <el-input
+            id="q-username"
             v-model="formData.username"
             class="w-[160px]"
             clearable
@@ -13,6 +14,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-input
+            id="q-realName"
             v-model="formData.realName"
             class="w-[160px]"
             clearable
@@ -22,6 +24,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-input
+            id="q-phoneNumber"
             v-model="formData.phoneNumber"
             class="w-[160px]"
             clearable

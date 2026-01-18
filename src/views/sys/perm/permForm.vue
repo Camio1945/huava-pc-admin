@@ -3,7 +3,7 @@
     <popup ref="popupRef" :title="popupTitle" :async="true" width="550px" @confirm="handleSubmit" @close="handleClose">
       <el-form ref="formRef" :model="formData" label-width="80px" :rules="rules">
         <el-form-item label="菜单类型" prop="type" required>
-          <el-radio-group v-model="formData.type">
+          <el-radio-group id="type" v-model="formData.type">
             <el-radio :label="MenuEnum.DIRECTORY">目录</el-radio>
             <el-radio :label="MenuEnum.MENU">菜单</el-radio>
             <el-radio :label="MenuEnum.ELEMENT">元素</el-radio>
@@ -11,6 +11,7 @@
         </el-form-item>
         <el-form-item label="父级菜单" prop="pid">
           <el-tree-select
+            id="pid"
             class="flex-1"
             v-model="formData.pid"
             :data="menuOptions"
@@ -25,21 +26,22 @@
           />
         </el-form-item>
         <el-form-item label="菜单名称" prop="name">
-          <el-input v-model="formData.name" placeholder="请输入菜单名称" clearable />
+          <el-input id="name" v-model="formData.name" placeholder="请输入菜单名称" clearable />
         </el-form-item>
         <el-form-item v-if="formData.type != MenuEnum.ELEMENT" label="菜单图标" prop="icon">
-          <icon-picker class="flex-1" v-model="formData.icon" />
+          <icon-picker id="icon" class="flex-1" v-model="formData.icon" />
         </el-form-item>
 
         <el-form-item v-if="formData.type != MenuEnum.ELEMENT" label="路由路径" prop="paths">
           <div class="flex-1">
-            <el-input v-model="formData.paths" placeholder="请输入路由路径" clearable />
+            <el-input id="paths" v-model="formData.paths" placeholder="请输入路由路径" clearable />
             <div class="form-tips">访问的路由地址，如：`user`，如外网地址需内链访问则以`http(s)://`开头</div>
           </div>
         </el-form-item>
         <el-form-item v-if="formData.type == MenuEnum.MENU" label="组件路径" prop="component">
           <div class="flex-1">
             <el-autocomplete
+              id="component"
               class="w-full"
               v-model="formData.component"
               :fetch-suggestions="querySearch"
@@ -51,27 +53,27 @@
         </el-form-item>
         <el-form-item label="选中菜单" prop="selected" v-if="formData.type == MenuEnum.MENU">
           <div class="flex-1">
-            <el-input v-model="formData.selected" placeholder="请输入路由路径" clearable />
+            <el-input id="selected" v-model="formData.selected" placeholder="请输入路由路径" clearable />
             <div class="form-tips">访问详情页面，编辑页面时，菜单高亮显示，如`/consumer/list`</div>
           </div>
         </el-form-item>
         <el-form-item v-if="formData.type != MenuEnum.DIRECTORY" label="接口URI" prop="uri">
           <div class="flex-1">
-            <el-input v-model="formData.uri" placeholder="请输入接口URI" clearable />
+            <el-input id="uri" v-model="formData.uri" placeholder="请输入接口URI" clearable />
             <div class="form-tips">将作为 server 端 API 验权使用，如`/sys/user/page`，请谨慎修改</div>
           </div>
         </el-form-item>
         <el-form-item v-if="formData.type == MenuEnum.MENU" label="路由参数" prop="params">
           <div>
             <div class="flex-1">
-              <el-input v-model="formData.params" placeholder="请输入路由参数" clearable />
+              <el-input id="params" v-model="formData.params" placeholder="请输入路由参数" clearable />
             </div>
             <div class="form-tips">访问路由的默认传递参数，如：`{"id": 1, "name": "admin"}`或`id=1&name=admin`</div>
           </div>
         </el-form-item>
         <el-form-item v-if="formData.type == MenuEnum.MENU" label="是否缓存" prop="isCache" required>
           <div>
-            <el-radio-group v-model="formData.isCache">
+            <el-radio-group id="isCache" v-model="formData.isCache">
               <el-radio :label="true">缓存</el-radio>
               <el-radio :label="false">不缓存</el-radio>
             </el-radio-group>
@@ -80,7 +82,7 @@
         </el-form-item>
         <el-form-item v-if="formData.type != MenuEnum.ELEMENT" label="是否显示" prop="isShow" required>
           <div>
-            <el-radio-group v-model="formData.isShow">
+            <el-radio-group id="isShow" v-model="formData.isShow">
               <el-radio :label="true">显示</el-radio>
               <el-radio :label="false">隐藏</el-radio>
             </el-radio-group>
@@ -89,7 +91,7 @@
         </el-form-item>
         <el-form-item v-if="formData.type != MenuEnum.ELEMENT" label="菜单状态" prop="isEnabled" required>
           <div>
-            <el-radio-group v-model="formData.isEnabled">
+            <el-radio-group id="isEnabled" v-model="formData.isEnabled">
               <el-radio :label="true">正常</el-radio>
               <el-radio :label="false">停用</el-radio>
             </el-radio-group>
@@ -98,7 +100,7 @@
         </el-form-item>
         <el-form-item label="菜单排序" prop="sort">
           <div>
-            <el-input-number v-model="formData.sort" :min="0" :max="9999" />
+            <el-input-number id="sort" v-model="formData.sort" :min="0" :max="9999" />
           </div>
         </el-form-item>
       </el-form>
