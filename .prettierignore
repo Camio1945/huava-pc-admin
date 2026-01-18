@@ -1,0 +1,11 @@
+build
+coverage
+node_modules
+.github
+.vscode
+.idea
+.DS_Store
+dist
+dist-ssr
+*.local
+.npmrc
