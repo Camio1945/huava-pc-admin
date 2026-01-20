@@ -36,13 +36,15 @@ test.describe('Login Test Using Same Approach as Existing Test', () => {
 
     // Verify that we are on the correct page
     await expect(page).toHaveURL(/.*\/admin\/sys\/user\/userPage/)
-    
+
     // Check that the page title or header contains expected text
     const pageTitle = page.locator('h1, .page-title, .header-title').first()
-    await expect(pageTitle).toBeVisible().catch(() => {
-      // If no h1 element exists, check for other common header elements
-      const header = page.locator('text=用户管理|用户列表|User Management').first()
-      expect(header).toBeTruthy()
-    })
+    await expect(pageTitle)
+      .toBeVisible()
+      .catch(() => {
+        // If no h1 element exists, check for other common header elements
+        const header = page.locator('text=用户管理|用户列表|User Management').first()
+        expect(header).toBeTruthy()
+      })
   })
 })
