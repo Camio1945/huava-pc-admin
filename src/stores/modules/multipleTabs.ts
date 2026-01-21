@@ -20,27 +20,16 @@ interface TabsSate {
   indexRouteName: RouteRecordName
 }
 
-const getHasTabIndex = (fullPath: string, tabList: TabItem[]) => {
-  return tabList.findIndex((item) => item.fullPath == fullPath)
-}
-
 const isCannotAddRoute = (route: RouteLocationNormalized, router: Router) => {
   const { path, meta, name } = route
   if (!path || isExternal(path)) return true
   if (meta?.hideTab) return true
   if (!router.hasRoute(name!)) return true
-  if (([PageEnum.LOGIN, PageEnum.ERROR_403] as string[]).includes(path)) {
-    return true
-  }
-  return false
-}
-
-const findTabsIndex = (fullPath: string, tabList: TabItem[]) => {
-  return tabList.findIndex((item) => item.fullPath === fullPath)
+  return !!([PageEnum.LOGIN, PageEnum.ERROR_403] as string[]).includes(path)
 }
 
 const getComponentName = (route: RouteLocationNormalized) => {
-  const matchedRoute = route.matched;
+  const matchedRoute = route.matched
   return matchedRoute[matchedRoute.length - 1]?.components?.default?.name
 }
 
@@ -93,29 +82,59 @@ const useTabsStore = defineStore('tabs', {
       const route = unref(router.currentRoute)
       const { name, query, meta, params, fullPath, path } = route
       if (isCannotAddRoute(route, router)) return
-      const hasTabIndex = getHasTabIndex(fullPath!, this.tabList)
+
+      // 标准化 fullPath 以便进行比较以检测重复项
+      const normalizedFullPath = this.normalizePathForComparison(fullPath!)
+      const hasTabIndex = this.findTabIndexByNormalizedPath(normalizedFullPath, this.tabList)
+
       const componentName = getComponentName(route)
+      // 使用原始 fullPath 作为选项卡项目以保持 UI 兼容性
       const tabItem = {
         name: name!,
         path,
-        fullPath,
+        fullPath, // 保留原始 fullPath 以供 UI 使用
         title: meta?.title,
         query,
         params
       }
+
+      if (hasTabIndex != -1) {
+        // 使用当前选项卡项目更新 tasMap
+        this.tasMap[fullPath] = tabItem
+        // 更新列表中的现有选项卡以确保其具有最新信息
+        this.tabList[hasTabIndex] = tabItem
+        return
+      }
+
       this.tasMap[fullPath] = tabItem
       if (meta?.keepAlive) {
         this.addCache(componentName)
       }
-      if (hasTabIndex != -1) {
-        return
-      }
 
       this.tabList.push(tabItem)
     },
+
+    // 用于路径比较的标准化方法
+    normalizePathForComparison(path: string) {
+      // 如果存在，移除末尾的 '?'
+      let normalized = path.replace(/\?$/, '')
+      // 分离路径和查询参数
+      const [basePath, queryParams] = normalized.split('?')
+      // 对查询参数进行排序以确保比较时的一致性
+      if (queryParams) {
+        const sortedQuery = queryParams.split('&').sort().join('&')
+        normalized = basePath + (sortedQuery ? '?' + sortedQuery : '')
+      }
+      return normalized
+    },
+
+    // 使用标准化路径比较查找选项卡索引的辅助方法
+    findTabIndexByNormalizedPath(normalizedPath: string, tabList: TabItem[]) {
+      return tabList.findIndex((item) => this.normalizePathForComparison(item.fullPath) === normalizedPath)
+    },
     removeTab(fullPath: string, router: Router) {
       const { currentRoute, push } = router
-      const index = findTabsIndex(fullPath, this.tabList)
+      const index = this.findTabIndexByNormalizedPath(this.normalizePathForComparison(fullPath), this.tabList)
       // 移除tab
       if (this.tabList.length > 1) {
         index !== -1 && this.tabList.splice(index, 1)
