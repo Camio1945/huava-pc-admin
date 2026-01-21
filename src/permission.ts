@@ -80,21 +80,21 @@ router.beforeEach(async (to, from, next) => {
         const routes = userStore.routes
 
         // Look for dashboard route specifically among user's routes
-        let dashboardRouteName = null;
-        const findDashboardRoute = (routeList: any[]) => {
+        let dashboardRouteName = null
+        const findDashboardRoute = (routeList: any[]): string | null => {
           for (const route of routeList) {
             if (route.path && route.path.includes('dashboard')) {
-              return route.name;
+              return route.name
             }
             if (route.children && route.children.length) {
-              const found = findDashboardRoute(route.children);
-              if (found) return found;
+              const found: string | null = findDashboardRoute(route.children)
+              if (found) return found
             }
           }
-          return null;
-        };
+          return null
+        }
 
-        dashboardRouteName = findDashboardRoute(routes);
+        dashboardRouteName = findDashboardRoute(routes)
 
         // Use dashboard route if available, otherwise use first valid route
         const routeName = dashboardRouteName || findFirstValidRoute(routes)
