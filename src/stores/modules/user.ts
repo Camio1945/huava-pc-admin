@@ -66,6 +66,7 @@ const useUserStore = defineStore('user', {
             this.userInfo = { username: data.username, avatar: data.avatar }
             this.perms = data.uris
             this.routes = filterAsyncRoutes(data.menu)
+            localStorage.setItem('username', data.username)
             resolve(data)
           })
           .catch((error) => {
