@@ -14,8 +14,7 @@ export interface UserState {
   perms: string[]
 }
 
-const useUserStore = defineStore({
-  id: 'user',
+const useUserStore = defineStore('user', {
   state: (): UserState => ({
     token: getToken() || '',
     // 用户信息

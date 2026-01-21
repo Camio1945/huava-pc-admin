@@ -7,8 +7,7 @@ import { SETTING_KEY } from '@/enums/cacheEnums'
 
 const storageSetting = cache.get(SETTING_KEY)
 
-export const useSettingStore = defineStore({
-  id: 'setting',
+export const useSettingStore = defineStore('setting', {
   state: () => {
     const state = {
       showDrawer: false,

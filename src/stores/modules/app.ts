@@ -1,18 +1,34 @@
 import { getConfig } from '@/api/app'
 import { defineStore } from 'pinia'
+import { nextTick } from 'vue'
+
+interface AppConfig {
+  oss_domain: string
+  web_name: string
+  web_favicon: string
+  web_logo: string
+  login_image: string
+  copyright_config: Array<{key: string, value: string}>
+}
 
 interface AppSate {
-  config: Record<string, any>
+  config: AppConfig
   isMobile: boolean
   isCollapsed: boolean
   isRouteShow: boolean
 }
 
-const useAppStore = defineStore({
-  id: 'app',
+const useAppStore = defineStore('app', {
   state: (): AppSate => {
     return {
-      config: {},
+      config: {
+        oss_domain: '',
+        web_name: '',
+        web_favicon: '',
+        web_logo: '',
+        login_image: '',
+        copyright_config: []
+      },
       isMobile: true,
       isCollapsed: false,
       isRouteShow: true
@@ -23,11 +39,11 @@ const useAppStore = defineStore({
       return url.indexOf('http') ? `${this.config.oss_domain}${url}` : url
     },
     getConfig() {
-      return new Promise((resolve, reject) => {
+      return new Promise<AppConfig>((resolve, reject) => {
         getConfig()
-          .then((data) => {
-            this.config = data
-            resolve(data)
+          .then((data: unknown) => {
+            this.config = data as AppConfig
+            resolve(data as AppConfig)
           })
           .catch((err) => {
             reject(err)

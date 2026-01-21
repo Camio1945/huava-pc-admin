@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { isExternal } from '@/utils/validate'
 import type { LocationQuery, RouteLocationNormalized, RouteParamsRaw, Router, RouteRecordName } from 'vue-router'
 import { PageEnum } from '@/enums/pageEnum'
+import { unref } from 'vue'
 
 interface TabItem {
   name: RouteRecordName
@@ -39,7 +40,8 @@ const findTabsIndex = (fullPath: string, tabList: TabItem[]) => {
 }
 
 const getComponentName = (route: RouteLocationNormalized) => {
-  return route.matched.at(-1)?.components?.default?.name
+  const matchedRoute = route.matched;
+  return matchedRoute[matchedRoute.length - 1]?.components?.default?.name
 }
 
 export const getRouteParams = (tabItem: TabItem) => {
@@ -51,8 +53,7 @@ export const getRouteParams = (tabItem: TabItem) => {
   }
 }
 
-const useTabsStore = defineStore({
-  id: 'tabs',
+const useTabsStore = defineStore('tabs', {
   state: (): TabsSate => ({
     cacheTabList: new Set(),
     tabList: [],

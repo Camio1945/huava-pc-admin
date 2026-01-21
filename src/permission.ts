@@ -78,8 +78,27 @@ router.beforeEach(async (to, from, next) => {
       try {
         await userStore.getUserInfo()
         const routes = userStore.routes
-        // 找到第一个有效路由
-        const routeName = findFirstValidRoute(routes)
+
+        // Look for dashboard route specifically among user's routes
+        let dashboardRouteName = null;
+        const findDashboardRoute = (routeList: any[]) => {
+          for (const route of routeList) {
+            if (route.path && route.path.includes('dashboard')) {
+              return route.name;
+            }
+            if (route.children && route.children.length) {
+              const found = findDashboardRoute(route.children);
+              if (found) return found;
+            }
+          }
+          return null;
+        };
+
+        dashboardRouteName = findDashboardRoute(routes);
+
+        // Use dashboard route if available, otherwise use first valid route
+        const routeName = dashboardRouteName || findFirstValidRoute(routes)
+
         // 没有有效路由跳转到403页面
         if (!routeName) {
           clearAuthInfo()

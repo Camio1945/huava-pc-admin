@@ -39,5 +39,20 @@ export const constantRoutes: Array<RouteRecordRaw> = [
 export const INDEX_ROUTE: RouteRecordRaw = {
   path: PageEnum.INDEX,
   component: LAYOUT,
-  name: INDEX_ROUTE_NAME
+  name: INDEX_ROUTE_NAME,
+  redirect: '/dashboard',
+  children: [
+    {
+      path: 'dashboard',
+      name: '工作台',
+      component: () => import('@/views/dashboard/dashboard.vue'),
+      meta: {
+        title: '工作台',
+        icon: 'dashboard', // You can change this to an appropriate icon
+        type: 2, // Assuming 2 represents a menu item (based on MenuEnum)
+        isShow: true,
+        perms: ['dashboard:view'] // Add appropriate permissions
+      }
+    }
+  ]
 }
